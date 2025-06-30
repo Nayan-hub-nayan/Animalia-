@@ -14,6 +14,7 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
+  FaDog,
 
   FaPaw,
   FaStethoscope,
@@ -58,7 +59,7 @@ console.log("logout");
   },{
     name: "Pet Profiles",
     path: "/dashboard/pet-profile",
-    icon: <FaPaw />,
+    icon: <FaDog />,
     roles: ["Client"],
   },
   {
@@ -103,6 +104,13 @@ console.log("logout");
     icon: <FaHeart />,
     roles: ["Client"],
   },
+   {
+    name: "Health Records",
+    path: "/dashboard/health-record",
+    icon: <FaHeart />,
+    roles: ["Client"],
+  },
+  
  
 
     // {

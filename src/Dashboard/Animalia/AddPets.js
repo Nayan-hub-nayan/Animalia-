@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useData } from "../../context/DataContext"
 
@@ -23,30 +21,28 @@ export default function PetProfileContent() {
     medicalHistory: "",
     vaccinations: "",
   })
-  const [imagePreview, setImagePreview] = useState<string>("")
+  const [imagePreview, setImagePreview] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-        reader.onload = (e) => {
+      reader.onload = (e) => {
         const result = e.target?.result
-        if (typeof result === "string") {
-          setImagePreview(result)
-          setFormData((prev) => ({ ...prev, image: result }))
-        }
+        setImagePreview(result)
+        setFormData((prev) => ({ ...prev, image: result }))
       }
       reader.readAsDataURL(file)
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -94,8 +90,8 @@ export default function PetProfileContent() {
   return (
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Add New Pet</h2>
-        <p className="text-green-600 mt-2">Register a new pet with complete information</p>
+        <h2 className="text-3xl font-bold">Add New Pet</h2>
+        <p className="text-green-100 mt-2">Register a new pet with complete information</p>
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
@@ -325,23 +321,22 @@ export default function PetProfileContent() {
 
           <div className="flex gap-4 pt-6">
             <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex-1 bg-black text-white hover:bg-white hover:text-black border border-black py-3 px-6 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Registering...
-                  </>
-                ) : (
-                  <>
-                    <span className="mr-2">💾</span>
-                    Register Pet
-                  </>
-                )}
-              </button>
-
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Registering...
+                </>
+              ) : (
+                <>
+                  <span className="mr-2">💾</span>
+                  Register Pet
+                </>
+              )}
+            </button>
             <button
               type="button"
               onClick={() => {

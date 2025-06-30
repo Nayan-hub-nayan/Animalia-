@@ -1,27 +1,9 @@
 "use client"
 
-import type React from "react"
 import { useState } from "react"
 import { useData } from "../../context/DataContext"
 
-interface ServiceBookingFormProps {
-  isOpen: boolean
-  onClose: () => void
-  selectedService?: {
-    id: string
-    name: string
-    icon: string
-    price?: string
-  }
-  selectedPet?: {
-    id: string
-    name: string
-    owner: string
-    phone: string
-  }
-}
-
-export default function ServiceBookingForm({ isOpen, onClose, selectedService, selectedPet }: ServiceBookingFormProps) {
+export default function ServiceBookingForm({ selectedService, selectedPet, onBack }) {
   const { pets, addAppointment } = useData()
   const [formData, setFormData] = useState({
     petId: selectedPet?.id || "",
@@ -38,10 +20,9 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
     symptoms: "",
     previousTreatment: "",
   })
-
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
@@ -58,7 +39,7 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -107,7 +88,7 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
       })
 
       alert("Service booked successfully! Check console for booking details.")
-      onClose()
+      onBack()
     } catch (error) {
       console.error("Error booking service:", error)
       alert("Error booking service. Please try again.")
@@ -116,87 +97,81 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white p-6 border border-gray-200 shadow-lg rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="mb-6 pt-44">
-            <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Services Selection</h2>
-        <p className="text-green-600 mt-2">Choose from available services for your pets</p>
-      </div>
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Services Selection</h2>
-        <p className="text-green-600 mt-2">Choose from available services for your pets</p>
-      </div>
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Services Selection</h2>
-        <p className="text-green-600 mt-2">Choose from available services for your pets</p>
-      </div>
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Services Selection</h2>
-        <p className="text-green-100 mt-2">Choose from available services for your pets</p>
-      </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6 text-gray-700"
-              >
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                <path d="M3 10h18"></path>
-              </svg>
-              <h2 className="text-2xl font-semibold text-gray-800">Book Service</h2>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 p-2 rounded-full transition-colors duration-200"
+    <div className="space-y-8">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-8 w-8 text-white"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+              <path d="M8 2v4"></path>
+              <path d="M16 2v4"></path>
+              <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+              <path d="M3 10h18"></path>
+            </svg>
+            <div>
+              <h2 className="text-3xl font-bold text-white">Book Service</h2>
+              <p className="text-blue-100 text-lg">Schedule your pet's appointment</p>
+            </div>
           </div>
-          <div className="mt-2">
-            {selectedService && (
-              <p className="text-gray-600 flex items-center">
-                <span className="mr-2">{selectedService.icon}</span>
-                {selectedService.name}
-                {selectedService.price && (
-                  <span className="ml-2 bg-gray-100 px-2 py-1 rounded-full text-sm">{selectedService.price}</span>
-                )}
-              </p>
-            )}
-            {selectedPet && <p className="text-gray-600 text-sm">for {selectedPet.name}</p>}
-          </div>
+          <button
+            onClick={onBack}
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-full transition-all duration-200"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Service and Pet Info */}
+        <div className="mt-6 flex flex-wrap gap-4">
+          {selectedService && (
+            <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+              <p className="text-white font-medium flex items-center">
+                <span className="mr-2 text-2xl">{selectedService.icon}</span>
+                <span className="text-lg">{selectedService.name}</span>
+                {selectedService.price && (
+                  <span className="ml-3 bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">
+                    {selectedService.price}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
+          {selectedPet && (
+            <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+              <p className="text-white font-medium text-lg">for {selectedPet.name}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Pet Selection (if not pre-selected) */}
           {!selectedPet && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Select Pet <span className="text-red-500">*</span>
+              <label htmlFor="petId" className="text-sm font-medium text-gray-700">
+                Select Pet *
               </label>
               <select
+                id="petId"
                 name="petId"
                 value={formData.petId}
                 onChange={handleInputChange}
                 required
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Choose your pet</option>
                 {pets.map((pet) => (
@@ -211,15 +186,16 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
           {/* Service Selection (if not pre-selected) */}
           {!selectedService && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Service Type <span className="text-red-500">*</span>
+              <label htmlFor="service" className="text-sm font-medium text-gray-700">
+                Service Type *
               </label>
               <select
+                id="service"
                 name="service"
                 value={formData.service}
                 onChange={handleInputChange}
                 required
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select service</option>
                 <option value="General Health Checkup">General Health Checkup</option>
@@ -238,29 +214,32 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
           {/* Date and Time */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Preferred Date <span className="text-red-500">*</span>
+              <label htmlFor="date" className="text-sm font-medium text-gray-700">
+                Preferred Date *
               </label>
               <input
-                type="date"
+                id="date"
                 name="date"
+                type="date"
                 value={formData.date}
                 onChange={handleInputChange}
                 required
                 min={new Date().toISOString().split("T")[0]}
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Time Slot <span className="text-red-500">*</span>
+              <label htmlFor="time" className="text-sm font-medium text-gray-700">
+                Time Slot *
               </label>
               <select
+                id="time"
                 name="time"
                 value={formData.time}
                 onChange={handleInputChange}
                 required
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select time slot</option>
                 <option value="9:00 AM - 12:00 PM">Morning (9:00 AM - 12:00 PM)</option>
@@ -273,12 +252,15 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
           {/* Doctor and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Preferred Doctor</label>
+              <label htmlFor="doctor" className="text-sm font-medium text-gray-700">
+                Preferred Doctor
+              </label>
               <select
+                id="doctor"
                 name="doctor"
                 value={formData.doctor}
                 onChange={handleInputChange}
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Any Available Doctor</option>
                 <option value="Dr. Sarah Wilson">Dr. Sarah Wilson (General Veterinarian)</option>
@@ -288,16 +270,18 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
                 <option value="Dr. Lisa Johnson">Dr. Lisa Johnson (Dental Specialist)</option>
               </select>
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Location <span className="text-red-500">*</span>
+              <label htmlFor="location" className="text-sm font-medium text-gray-700">
+                Location *
               </label>
               <select
+                id="location"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
                 required
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select location</option>
                 <option value="Main Clinic">Main Clinic (Downtown)</option>
@@ -311,73 +295,89 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
           {/* Contact Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Primary Contact Phone <span className="text-red-500">*</span>
+              <label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                Primary Contact Phone *
               </label>
               <input
-                type="tel"
+                id="phone"
                 name="phone"
+                type="tel"
                 value={formData.phone}
                 onChange={handleInputChange}
                 required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Primary contact number"
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Emergency Contact</label>
+              <label htmlFor="emergencyContact" className="text-sm font-medium text-gray-700">
+                Emergency Contact
+              </label>
               <input
-                type="tel"
+                id="emergencyContact"
                 name="emergencyContact"
+                type="tel"
                 value={formData.emergencyContact}
                 onChange={handleInputChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Emergency contact number"
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               />
             </div>
           </div>
 
           {/* Symptoms and Previous Treatment */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Current Symptoms</label>
+              <label htmlFor="symptoms" className="text-sm font-medium text-gray-700">
+                Current Symptoms
+              </label>
               <textarea
+                id="symptoms"
                 name="symptoms"
                 value={formData.symptoms}
                 onChange={handleInputChange}
                 rows={3}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="Describe any symptoms or concerns you've noticed..."
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
               />
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Previous Treatment</label>
+              <label htmlFor="previousTreatment" className="text-sm font-medium text-gray-700">
+                Previous Treatment
+              </label>
               <textarea
+                id="previousTreatment"
                 name="previousTreatment"
                 value={formData.previousTreatment}
                 onChange={handleInputChange}
                 rows={2}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="Any recent treatments, medications, or vet visits..."
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
               />
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Additional Notes</label>
+              <label htmlFor="notes" className="text-sm font-medium text-gray-700">
+                Additional Notes
+              </label>
               <textarea
+                id="notes"
                 name="notes"
                 value={formData.notes}
                 onChange={handleInputChange}
                 rows={3}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="Any special requirements, dietary restrictions, or other important information..."
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
               />
             </div>
           </div>
 
           {/* Terms and Conditions */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Booking Terms:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-medium text-gray-900 mb-3">Booking Terms:</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
               <li>• Appointments are confirmed within 2 hours</li>
               <li>• Cancellation allowed up to 4 hours before appointment</li>
               <li>• Home visits require advance payment</li>
@@ -386,28 +386,30 @@ export default function ServiceBookingForm({ isOpen, onClose, selectedService, s
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-4 flex gap-4">
+          <div className="pt-6 flex gap-4 justify-center">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-gray-800 text-white py-3 rounded-md hover:bg-gray-700 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-8 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               {isSubmitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Booking...
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Booking...</span>
                 </>
               ) : (
-                "Confirm Booking"
+                <>
+                  <span>📅</span>
+                  <span>Confirm Booking</span>
+                </>
               )}
             </button>
             <button
               type="button"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-200"
+              onClick={onBack}
+              className="border border-gray-300 text-gray-700 py-3 px-8 rounded-xl font-medium hover:bg-gray-50 transition-colors duration-200"
             >
-              Cancel
+              Back to List
             </button>
           </div>
         </form>

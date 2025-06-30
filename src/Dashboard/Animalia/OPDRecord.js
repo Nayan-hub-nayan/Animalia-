@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useData } from "../../context/DataContext"
 
@@ -17,10 +15,10 @@ export default function OPDRecordContent() {
     status: "Pending",
     doctor: "Not Assigned",
   })
-  const [images, setImages] = useState<string[]>([])
-  const [documents, setDocuments] = useState<string[]>([])
+  const [images, setImages] = useState([])
+  const [documents, setDocuments] = useState([])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
@@ -36,13 +34,13 @@ export default function OPDRecordContent() {
     }
   }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e) => {
     const files = e.target.files
     if (files) {
       Array.from(files).forEach((file) => {
         const reader = new FileReader()
         reader.onload = (e) => {
-          const result = e.target?.result as string
+          const result = e.target?.result
           setImages((prev) => [...prev, result])
         }
         reader.readAsDataURL(file)
@@ -50,13 +48,13 @@ export default function OPDRecordContent() {
     }
   }
 
-  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDocumentUpload = (e) => {
     const files = e.target.files
     if (files) {
       Array.from(files).forEach((file) => {
         const reader = new FileReader()
         reader.onload = (e) => {
-          const result = e.target?.result as string
+          const result = e.target?.result
           setDocuments((prev) => [...prev, result])
         }
         reader.readAsDataURL(file)
@@ -64,7 +62,7 @@ export default function OPDRecordContent() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     const recordData = {
@@ -92,7 +90,7 @@ export default function OPDRecordContent() {
     alert("OPD Record submitted successfully!")
   }
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityColor = (severity) => {
     switch (severity) {
       case "Critical":
         return "bg-red-100 text-red-700"
@@ -107,7 +105,7 @@ export default function OPDRecordContent() {
     }
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     switch (status) {
       case "Completed":
         return "bg-green-100 text-green-700"
@@ -123,8 +121,8 @@ export default function OPDRecordContent() {
   return (
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">OPD Records</h2>
-        <p className="text-gray-600 mt-2">Manage outpatient department records and consultations</p>
+        <h2 className="text-3xl font-bold">OPD Records</h2>
+        <p className="text-orange-100 mt-2">Manage outpatient department records and consultations</p>
       </div>
 
       {/* New Record Form */}
@@ -255,13 +253,13 @@ export default function OPDRecordContent() {
             )}
           </div>
 
-         <button
-  type="submit"
-  className="w-full bg-black text-white hover:bg-white hover:text-black border border-black py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-all duration-200"
->
-  <span>📋</span> <span>Submit OPD Record</span>
-</button>
-
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-all duration-200"
+          >
+            <span>📋</span>
+            <span>Submit OPD Record</span>
+          </button>
         </form>
       </div>
 

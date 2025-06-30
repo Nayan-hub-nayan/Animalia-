@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useData } from "../../context/DataContext"
 
@@ -21,7 +19,7 @@ export default function AppointmentsContent() {
     phone: "",
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
@@ -38,7 +36,7 @@ export default function AppointmentsContent() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
     addAppointment(formData)
@@ -61,15 +59,15 @@ export default function AppointmentsContent() {
     alert("Appointment booked successfully!")
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status) => {
     return status === "Confirmed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
   }
 
   return (
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white">
-        <h2 className="text-3xl font-bold text-gray-900">Appointments</h2>
-        <p className="text-gray-600 mt-2-">Schedule and manage appointments</p>
+        <h2 className="text-3xl font-bold">Appointments</h2>
+        <p className="text-blue-100 mt-2">Schedule and manage appointments</p>
       </div>
 
       {/* Book New Appointment */}
@@ -207,10 +205,10 @@ export default function AppointmentsContent() {
             />
           </div>
 
-         <button
-  type="submit"
-  className="w-full bg-black text-white hover:bg-white hover:text-black border border-black py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-all duration-200"
->
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-all duration-200"
+          >
             <span>📅</span>
             <span>Book Appointment</span>
           </button>

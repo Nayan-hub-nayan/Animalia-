@@ -1,8 +1,9 @@
 "use client"
-import { Link,  } from "react-router-dom";
 
 import { useData } from "../../context/DataContext"
 import { useEffect, useState } from "react"
+import { Link,  } from "react-router-dom";
+
 
 export default function DashboardContent() {
   const { getStats, pets, opdRecords, appointments } = useData()
@@ -17,11 +18,13 @@ export default function DashboardContent() {
     return () => clearInterval(timer)
   }, [])
 
- const quickActions = [
-    { title: "Add New Pet", description: "Register a new pet profile", icon: "➕", path: "/dashboard/add-pets" },
+  const quickActions = [
+   { title: "Add New Pet", description: "Register a new pet profile", icon: "➕", path: "/dashboard/add-pets" },
     { title: "Schedule Appointment", description: "Book a new appointment", icon: "📅", path: "/dashboard/appoinment", },
     { title: "Emergency Service", description: "Access emergency services", icon: "🚨" ,  path: "/dashboard/service"},
     { title: "View Health Records", description: "Browse pet health records", icon: "📊", path: "/dashboard/opd-record", },
+        { title: "View All Pets", description: "Browse all registered pets", icon: "🐾", action: "pets", path: "/dashboard/pet-profile", },
+
   ]
 
   const recentActivities = [
@@ -46,18 +49,17 @@ export default function DashboardContent() {
   ].slice(0, 5)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header with Live Time */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Dashboard Overview</h2>
-        <p className="text-gray-600 mt-2">Welcome to the Veterinary Management System</p>
-      </div>
-
+            <h2 className="text-3xl font-bold">Dashboard Overview</h2>
+            <p className="text-blue-100 mt-2">Welcome to the Veterinary Management System</p>
+          </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-gray-900">{currentTime.toLocaleTimeString()}</div>
-            <div className="text-purple-600">
+            <div className="text-2xl font-mono font-bold">{currentTime.toLocaleTimeString()}</div>
+            <div className="text-blue-100">
               {currentTime.toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
@@ -128,7 +130,7 @@ export default function DashboardContent() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2">
         {/* Quick Actions */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
           <div className="p-6 border-b border-gray-100">
@@ -140,20 +142,27 @@ export default function DashboardContent() {
           </div>
           <div className="p-6 space-y-3">
             {quickActions.map((action, index) => (
-               <Link
+              <Link
                     to={action.path}>
               <div
                 key={index}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 cursor-pointer transition-all duration-200 group"
               >
                 <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{action.icon}</span>
+                  <span className="text-2xl group-hover:scale-110 transition-transform duration-200">
+                    {action.icon}
+                  </span>
                   <div>
                     <p className="font-medium text-gray-900">{action.title}</p>
                     <p className="text-sm text-gray-500">{action.description}</p>
                   </div>
                 </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 ">
+                <svg
+                  className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors duration-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
@@ -183,7 +192,7 @@ export default function DashboardContent() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                    <p className="text-xs text-gray-00">{activity.time}</p>
+                    <p className="text-xs text-gray-500">{activity.time}</p>
                   </div>
                 </div>
               ))

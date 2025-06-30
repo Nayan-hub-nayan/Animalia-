@@ -40,7 +40,7 @@ const App = () => {
     <DataProvider>
     <Router>
         <Routes>
-          <Route path="/" element={<Home test="Vaibhav"/>} />
+          <Route path="/" element={<Home test="Jadoo"/>} />
   
           <Route element={<Dashboard />}>
             {(
